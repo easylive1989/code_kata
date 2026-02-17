@@ -1,0 +1,79 @@
+name: Deploy Flame Games to GitHub Pages
+
+on:
+  push:
+    branches: [master]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - project: flutter_breakout
+            working-directory: flame/flutter_breakout
+            base-href: /code_kata/flutter_breakout/
+            target: ""
+          - project: knight_counter_demo
+            working-directory: flame/knight_counter_demo
+            base-href: /code_kata/knight_counter_demo/
+            target: ""
+          - project: player_ns_shaft
+            working-directory: flame/player_ns_shaft
+            base-href: /code_kata/player_ns_shaft/
+            target: "-t lib/main_production.dart"
+          - project: ray_world_game
+            working-directory: flame/ray_world_game
+            base-href: /code_kata/ray_world_game/
+            target: ""
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.7.10'
+          channel: 'stable'
+
+      - name: Install dependencies
+        working-directory: ${{ matrix.working-directory }}
+        run: flutter pub get
+
+      - name: Build web
+        working-directory: ${{ matrix.working-directory }}
+        run: flutter build web --release --web-renderer html --base-href "${{ matrix.base-href }}" ${{ matrix.target }}
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.project }}
+          path: ${{ matrix.working-directory }}/build/web
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Download all build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: combined
+
+      - name: Upload combined Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: combined
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
