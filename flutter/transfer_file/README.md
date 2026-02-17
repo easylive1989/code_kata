@@ -1,0 +1,1 @@
+## 研究：簡化路由設計 [Link](https://medium.com/cloud-latitude-engineering-blog/%E4%BD%BF%E7%94%A8-nested-navigation-%E7%B0%A1%E5%8C%96%E8%B7%AF%E7%94%B1%E8%A8%AD%E8%A8%88-3a3ffade36bc)
