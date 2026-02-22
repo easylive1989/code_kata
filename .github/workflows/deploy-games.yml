@@ -38,6 +38,10 @@ jobs:
             working-directory: flame/ray_world_game
             base-href: /code_kata/ray_world_game/
             target: ""
+          - project: flutter_tetris
+            working-directory: flame/flutter_tetris
+            base-href: /code_kata/flutter_tetris/
+            target: ""
     steps:
       - uses: actions/checkout@v4
         with:
