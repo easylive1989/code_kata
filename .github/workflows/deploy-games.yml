@@ -25,22 +25,38 @@ jobs:
           - project: flutter_breakout
             working-directory: flame/flutter_breakout
             base-href: /code_kata/flutter_breakout/
+            flutter-version: '3.7.10'
+            build-args: "--web-renderer html"
             target: ""
           - project: knight_counter_demo
             working-directory: flame/knight_counter_demo
             base-href: /code_kata/knight_counter_demo/
+            flutter-version: '3.7.10'
+            build-args: "--web-renderer html"
             target: ""
           - project: player_ns_shaft
             working-directory: flame/player_ns_shaft
             base-href: /code_kata/player_ns_shaft/
+            flutter-version: '3.7.10'
+            build-args: "--web-renderer html"
             target: "-t lib/main_production.dart"
           - project: ray_world_game
             working-directory: flame/ray_world_game
             base-href: /code_kata/ray_world_game/
+            flutter-version: '3.7.10'
+            build-args: "--web-renderer html"
             target: ""
           - project: flutter_tetris
             working-directory: flame/flutter_tetris
             base-href: /code_kata/flutter_tetris/
+            flutter-version: '3.7.10'
+            build-args: "--web-renderer html"
+            target: ""
+          - project: water_sort_puzzle
+            working-directory: flame/water_sort_puzzle
+            base-href: /code_kata/water_sort_puzzle/
+            flutter-version: '3.38.5'
+            build-args: ""
             target: ""
     steps:
       - uses: actions/checkout@v4
@@ -71,7 +87,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         if: steps.check.outputs.changed == 'true' || steps.cache.outputs.cache-hit != 'true'
         with:
-          flutter-version: '3.7.10'
+          flutter-version: ${{ matrix.flutter-version }}
           channel: 'stable'
 
       - name: Install dependencies
@@ -82,7 +98,7 @@ jobs:
       - name: Build web
         if: steps.check.outputs.changed == 'true' || steps.cache.outputs.cache-hit != 'true'
         working-directory: ${{ matrix.working-directory }}
-        run: flutter build web --release --web-renderer html --base-href "${{ matrix.base-href }}" ${{ matrix.target }}
+        run: flutter build web --release --base-href "${{ matrix.base-href }}" ${{ matrix.build-args }} ${{ matrix.target }}
 
       - name: Save build cache
         if: steps.check.outputs.changed == 'true' || steps.cache.outputs.cache-hit != 'true'
