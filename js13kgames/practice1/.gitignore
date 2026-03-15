@@ -1,0 +1,5 @@
+game.min.js
+game.packed.js
+game.zip
+node_modules/*
+.DS_Store

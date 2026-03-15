@@ -1,0 +1,16 @@
+{
+  "name": "practice1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "game.js",
+  "scripts": {
+    "dev": "npx server .",
+    "build": "npm run minify && npm run pack && npm run zip",
+    "minify": "npx terser game.js -o game.min.js --compress --mangle",
+    "pack": "npx roadroller game.min.js -o game.packed.js",
+    "zip": "zip -9 game.zip index.html game.packed.js",
+    "size": "wc -c game.zip"
+  },
+  "author": "",
+  "license": "ISC"
+}
